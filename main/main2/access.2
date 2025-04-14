@@ -1,0 +1,40 @@
+NAME
+    access
+
+SYNOPSIS
+    #include <unistd.h>
+
+    int access(const char *pathname, int mode);
+
+DESCRIPTION
+    The Access function verifies existence and access authorizations to the file specified by the pathname parameter. 
+    The information to be checked must be specified in the amode parameter.
+    Note: It is possible to test several permissions simultaneously by combining them using the binary operator |. 
+    For example, to test the existence and permission of reading, we will use F_ok | R_ok.
+
+PARAMETERS
+    Pathname: This parameter allows you to indicate the file for which to carry out the checks.
+    Amode: an integer that represents the mode of access to test. He can take one of the following values:
+            F_ok: Test the existence of the file.
+            R_ok: Test the reading permission.
+            W_ok: Test the writing permission.
+            X_ok: Test the execution permission.
+
+RETURN VALUE
+    The Access function returns 0 if access to the file is authorized according to the specified access mode. 
+    If access is refused or if an error has occurred, the function returns -1. 
+    If an error is noted, the ERRNO variable will be fixed with the error code noted.
+
+ERRORS
+    EACCES: Access to the file is refused due to access restrictions.
+    EFAULT: The pathname pointer specified in a parameter points outside the authorized address space.
+    EINTR: The value of the amode parameter is invalid.
+    ELOOP: The specified path contains a circular reference, certainly through a symbolic link.
+    ENAMETOOLONG: The specified path exceeds path_max characters, or one of its constituent elements exceeds Name_max.
+    ENOENT: The specified path does not exist.
+    ENOMEM: There is no longer enough memory for the nucleus.
+    ENOTDIR: one of the elements of the specified path is not a file.
+    EROFS: writing access is requested on a Read-Only file system.
+
+CONFORMING TO
+    POSIX 88 (IEEE STD 1003.1-1988) and subsequent versions.
