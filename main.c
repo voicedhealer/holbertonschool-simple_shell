@@ -54,7 +54,7 @@ int main(int ac, char **av, char **env)
 }
 
 /**
- * prompt_display - Affiche le prompt "$ " si le shell est en mode interactif
+ * prompt_display - Affiche le prompt "*** " si le shell est en mode interactif
  *
  * On utilise isatty(STDIN_FILENO) pour savoir si l'utilisateur tape en direct
  * (et pas via un script comme echo "ls" | ./hsh)
@@ -63,5 +63,5 @@ int main(int ac, char **av, char **env)
 void prompt_display(void)
 {
     if (isatty(STDIN_FILENO))
-		write(STDOUT_FILENO, "$ ", 2);  /*pas de printf car c'est plus lourd en memoire*/
+		write(STDOUT_FILENO, "*** ", 2);  /*pas de printf car c'est plus lourd en memoire*/
 }
