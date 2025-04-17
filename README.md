@@ -95,3 +95,7 @@ cat test_commands.txt | ./hsh
 valgrind --leak-check=full  ./hsh
 
 ---
+
+![FlowChartShell drawio](https://github.com/user-attachments/assets/20b5b1dd-3632-4d3b-97ae-d69b28351a32)
+
+
