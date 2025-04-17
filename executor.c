@@ -1,40 +1,48 @@
 #include "shell.h"
 
-/*
-* Exécute une commande avec ses arguments et l'environnement.
-* Retourne le code de sortie du processus enfant, ou -1 en cas d'erreur.
-*/
-int execute_command(char **argv, char **env) {
 
-	pid_t pid;
-	int status;
+int execute_command(char **argv, char **env);
+{
+/*Pour stocker le résultat de fork()*/
+pid_t pid;
 
-	/* 1. Vérifie si la commande existe (si le premier argument existe) */
-	if (argv == NULL || argv[0] == NULL)
-		return (-1); /* Rien à exécuter */
+/* Pour récupérer le code de retour du processus fils*/
+int status;
 
-	/* 2. Crée un processus enfant */
-	pid = fork();
-	if (pid < 0) {
-		/* Erreur lors du fork */
-		perror("fork");
-		return (-1);
-	}
-	else if (pid == 0) {
-		/* 3. Code exécuté par le processus enfant : exécute la commande */
-		if (execve(argv[0], argv, env) == -1) {
-			perror("execve");
-			_exit(1); /* Termine le processus enfant en cas d'erreur */
-		}
-	}
-	else {
-		/* 4. Code exécuté par le parent : attend la fin de l'enfant */
-		if (waitpid(pid, &status, 0) == -1) {
-			perror("waitpid");
-			return (-1);
-		}
-	}
+/* Pour stocker le chemin complet de la commande*/
+char *cmd_path;
 
-	/* 5. Retourne le code de retour du processus enfant */
-	return (WIFEXITED(status) ? WEXITSTATUS(status) : -1);
+if (argv == NULL || argv[0] == NULL)
+return (-1);  /*Pas de commande à exécuter*/
+
+cmd_path = find_command_path(argv[0], env);
+if (cmd_path == NULL || !is_executable(cmd_path))
+{
+	fprintf(stderr, "%s: command not found\n", argv[0]);
+	if (cmd_path)
+		free(cmd_path);
+	return (127);  /*Code d'erreur standard pour commande non trouvée*/
+}
+
+pid = fork();
+if (pid < 0)
+{
+	perror("fork");
+	free(cmd_path);
+return (-1);  /*Erreur lors du fork*/
+}
+
+if (pid == 0)
+{
+	if (execve(cmd_path, argv, env) == -1)
+{
+		perror("execve");
+		free(cmd_path);
+		exit(126);  /*Erreur d'exécution*/
+}
+}
+waitpid(pid, &status, 0);
+
+free(cmd_path);
+return (0);
 }
