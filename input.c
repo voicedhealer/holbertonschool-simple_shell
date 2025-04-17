@@ -22,10 +22,6 @@ char *read_input(void)
 
 	size_t buffer_size = 0;
 
-	/* Affiche le prompt et force l'affichage immédiat */
-	printf("$ ");
-	fflush(stdout);
-
 	/* Lit une ligne depuis l'entrée standard */
 	if (getline(&line, &buffer_size, stdin) == -1)
 	{
@@ -52,16 +48,45 @@ char *trim_newline(char *line)
 {
 	size_t len;
 
-    /* Vérifie si la chaîne est NULL */
+	/* Vérifie si la chaîne est NULL */
 	if (!line)
 	return (NULL);
 
-     /* Calcule la longueur de la chaîne */
+	/* Calcule la longueur de la chaîne */
 	len = strlen(line);
 
-     /* Si la chaîne n'est pas vide et se termine par '\n', le retire */
+	/* Si la chaîne n'est pas vide et se termine par '\n', le retire */
 	if (len > 0 && line[len - 1] == '\n')
 	line[len - 1] = '\0';
 
 	return (line);
+}
+
+#include <ctype.h>
+/**
+* is_line_empty - Vérifie si une ligne ne contient que des espaces
+* ou est vide.
+* @line: La chaine a vérifier.
+*
+* Description:
+* Cette fonction parcourt la chaine passée en argument et verifie
+* si elle contient que des caratères d'espacement (espaces,
+* tabulations, retoursà la ligne, ect.) ou si elle est vide.
+* Si la chaine est NULL ou ne contient que des espaces, la fonction
+* retourne 1 (vrai). Sinon, elle retourne 0 (faux).
+*
+* Return: 1 si la ligne est vide ou ne contient que des espaces, sinon 0.
+*/
+int is_line_empty(char *line)
+{
+	if (!line) /* Vérifie si la chaîne est NULL */
+		return (1);
+
+	while (*line) /* Parcourt chaque caractère de la chaîne */
+	{
+		if (!isspace((unsigned char)*line))  /* Si un caractère n'est pas un espace, la ligne n'est pas vide */
+			return (0);
+		line++;
+	}
+	return (1);  /* Tous les caractères sont des espaces ou la chaîne est vide */
 }
