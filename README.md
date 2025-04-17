@@ -1,4 +1,4 @@
-<h1 align="left">
+<h1 align="center">
   <span style="color:white;"><strong>SIMPLE SHELL</strong></span>
 </h1>
 
