@@ -63,5 +63,7 @@ int main(int ac, char **av, char **env)
 void prompt_display(void)
 {
     if (isatty(STDIN_FILENO))
-		write(STDOUT_FILENO, "*** ", 2);  /*pas de printf car c'est plus lourd en memoire*/
+		write(STDOUT_FILENO, "*** ", 2); /*pas de printf car c'est plus lourd en memoire*/
+
+	/* fflush(stdout); force l'affichage immédiat mais que pour prinf() puts() putchar() donc inutile ici*/
 }
