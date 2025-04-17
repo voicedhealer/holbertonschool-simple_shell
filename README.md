@@ -1,16 +1,6 @@
-<p style="font-size: 50px; font-weight: bold; text-align: center; background-image: linear-gradient(45deg, #ff0080, #00ff80, #0000ff, #ffdd00, #ff0080); -webkit-background-clip: text; color: transparent; animation: neon 1.5s infinite alternate;">Simple Shell</p>
-
-<style>
-  @keyframes neon {
-    0% {
-      text-shadow: 0 0 3px #ff0080, 0 0 6px #ff0080, 0 0 12px #ff0080, 0 0 18px #ff0080;
-    }
-    100% {
-      text-shadow: 0 0 3px #00ff80, 0 0 6px #00ff80, 0 0 12px #00ff80, 0 0 18px #00ff80;
-    }
-  }
-</style>
-
+<h1 align="left">
+  <span style="color:white;"><strong>SIMPLE SHELL</strong></span>
+</h1>
 
   <h2 align="left">
   <span style="color:white;"><strong>Description</strong></span>
