@@ -1,13 +1,19 @@
 #include "shell.h"
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
 
-/**  
-* main - Point d'entrée de notre shell (./hsh)
-* @ac: nombre d'arguments (non utilisé ici)
-* @av: tableau des arguments (non utilisé ici)
-* @env: tableau des variables d'environnement (utilisé pour execve et env)
-*
-*Return: 0 à la fin du programme
-*/
+/**
+ * main - Point d’entrée du shell
+ * @ac: nombre d'arguments (non utilisé)
+ * @av: tableau d'arguments (non utilisé)
+ * @env: tableau des variables d’environnement
+ *
+ * Return: 0 à la fin
+ */
+
+char *PROGRAM_NAME = NULL; /* Pour afficher ./hsh dans les erreurs */
+
 int main(int ac, char **av, char **env)
 {
     char *line = NULL;
@@ -15,7 +21,8 @@ int main(int ac, char **av, char **env)
 
     (void)ac;
     (void)av;
-    
+    PROGRAM_NAME = av[0]; /* Garde ./hsh pour les messages d'erreur */
+
     while (1)
     {
         prompt_display();
@@ -39,10 +46,20 @@ int main(int ac, char **av, char **env)
             continue;
         }
 
-        if (is_builtin(argv[0]))
+        /* Vérifier si la commande est 'open_terminal' */
+        if (strcmp(argv[0], "open_terminal") == 0)
+        {
+            /* Lancer un nouveau terminal avec le shell 'hsh' dans cette fenêtre */
+            system("xterm -e ./hsh &");
+        }
+        else if (is_builtin(argv[0]))
+        {
             handle_builtin(argv, env);
+        }
         else
+        {
             execute_command(argv, env);
+        }
 
         free(line);
         free_tokens(argv);
@@ -52,18 +69,11 @@ int main(int ac, char **av, char **env)
     return (0);
 }
 
-
 /**
- * prompt_display - Affiche le prompt "*** " si le shell est en mode interactif
- *
- * On utilise isatty(STDIN_FILENO) pour savoir si l'utilisateur tape en direct
- * (et pas via un script comme echo "ls" | ./hsh)
+ * prompt_display - Affiche le prompt "*** " si shell interactif
  */
-
 void prompt_display(void)
 {
     if (isatty(STDIN_FILENO))
-		write(STDOUT_FILENO, "*** ", 2); /*pas de printf car c'est plus lourd en memoire*/
-
-	/* fflush(stdout); force l'affichage immédiat mais que pour prinf() puts() putchar() donc inutile ici*/
+        write(STDOUT_FILENO, "*** ", 4); /* 4 car "*** " = 4 caractères */
 }
