@@ -58,13 +58,16 @@ char **parse_line(char *line)
  */
 void free_tokens(char **tokens)
 {
+    int index; /* Déclaration au début du bloc */
+
     if (tokens == NULL)
-    return;
+        return;
     /* Libère chaque chaine du tableau */
-    for (int index = 0; tokens[index] != NULL; index++)
+    for (index = 0; tokens[index] != NULL; index++)
     {
         free(tokens[index]);
     }
-    /* Libère le tableau lui meme*/
+    /* Libère le tableau lui-même */
     free(tokens);
 }
+
