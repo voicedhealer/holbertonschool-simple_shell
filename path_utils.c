@@ -12,20 +12,27 @@ char *find_command_path(char *cmd, char **env)
     char *token = NULL, *full_path = NULL;
     struct stat st;
     int i;
+
     /* Trouver la variable PATH dans l'environnement */
     for (i = 0; env[i] != NULL; i++)
     {
         if (strncmp(env[i], "PATH=", 5) == 0)
         {
-            path_env = env[i] + 5;
+            path_env = strdup(env[i] + 5);
             break;
         }
     }
+
     if (path_env == NULL)
         return (NULL);
+
     path_copy = strdup(path_env);
     if (!path_copy)
+    {
+        free(path_env);
         return (NULL);
+    }
+
     token = strtok(path_copy, ":");
     while (token != NULL)
     {
@@ -33,20 +40,26 @@ char *find_command_path(char *cmd, char **env)
         if (!full_path)
         {
             free(path_copy);
+            free(path_env);
             return (NULL);
         }
+
         sprintf(full_path, "%s/%s", token, cmd);
         if (stat(full_path, &st) == 0 && is_executable(full_path))
         {
             free(path_copy);
+            free(path_env);
             return (full_path);
         }
         free(full_path);
         token = strtok(NULL, ":");
     }
+
     free(path_copy);
+    free(path_env);
     return (NULL);
 }
+
 
 /*Fonction qui vérifie si le fichier est exécutable*/
 int is_executable(char *full_path)

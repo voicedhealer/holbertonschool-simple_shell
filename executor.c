@@ -3,46 +3,55 @@
 
 int execute_command(char **argv, char **env)
 {
-/*Pour stocker le résultat de fork()*/
-pid_t pid;
+    pid_t pid;
+    char *cmd_path = NULL;
 
-/* Pour récupérer le code de retour du processus fils*/
-int status;
+    /* Si c’est une commande avec un chemin absolu ou relatif */
+    if (strchr(argv[0], '/'))
+    {
+        if (access(argv[0], X_OK) == 0)
+        {
+            cmd_path = strdup(argv[0]);
+            if (!cmd_path)
+                return (127); /* erreur malloc */
+        }
+        else
+        {
+            perror(argv[0]);
+            return (127);
+        }
+    }
+    else
+    {
+        /* Sinon on cherche dans le PATH */
+        cmd_path = find_command_path(argv[0], env);
+        if (!cmd_path)
+        {
+            fprintf(stderr, "%s: command not found\n", argv[0]);
+            /* ✅ Pas besoin de free ici car cmd_path = NULL */
+            return (127);
+        }
+    }
 
-/* Pour stocker le chemin complet de la commande*/
-char *cmd_path;
+    pid = fork();
+    if (pid == -1)
+    {
+        perror("fork");
+        free(cmd_path); /* ✅ on libère si fork échoue */
+        return (127);
+    }
+    else if (pid == 0)
+    {
+        execve(cmd_path, argv, env);
+        perror(argv[0]);
+        free(cmd_path); /* ✅ libère dans le fils si execve échoue */
+        exit(1);
+    }
+    else
+    {
+        wait(NULL);
+    }
 
-if (argv == NULL || argv[0] == NULL)
-return (-1);  /*Pas de commande à exécuter*/
-
-cmd_path = find_command_path(argv[0], env);
-if (cmd_path == NULL || !is_executable(cmd_path))
-{
-	fprintf(stderr, "%s: command not found\n", argv[0]);
-	if (cmd_path)
-		free(cmd_path);
-	return (127);  /*Code d'erreur standard pour commande non trouvée*/
-}
-
-pid = fork();
-if (pid < 0)
-{
-	perror("fork");
-	free(cmd_path);
-return (-1);  /*Erreur lors du fork*/
-}
-
-if (pid == 0)
-{
-	if (execve(cmd_path, argv, env) == -1)
-{
-		perror("execve");
-		free(cmd_path);
-		exit(126);  /*Erreur d'exécution*/
-}
-}
-waitpid(pid, &status, 0);
-
-free(cmd_path);
-return (0);
+    free(cmd_path); /* ✅ libère dans le parent après exécution */
+    return (0);
 }

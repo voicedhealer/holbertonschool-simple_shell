@@ -10,48 +10,48 @@
 */
 int main(int ac, char **av, char **env)
 {
-	char *line = NULL;     /* ligne tapée par l'utilisateur */
-	char **argv = NULL;    /* tableau de mots (commande + arguments) */
+    char *line = NULL;
+    char **argv = NULL;
 
-	(void)ac; /* On ignore ac/av car on ne les utilise pas dans ce shell */
-	(void)av;
-
-	while (1)
+    (void)ac;
+    (void)av;
+    
+    while (1)
     {
-
         prompt_display();
-        line = read_input();    /* Lire une ligne tapée par l'utilisateur */
-		if (!line)              /* Si Ctrl+D (getline retourne -1) */
-			break;
-            line = trim_newline(line);         /* Supprime le \n final */
+        line = read_input(); /* lit ligne */
+        if (!line) /* Ctrl+D */
+            break;
 
-		if (is_line_empty(line))           /* Si la ligne est vide ou remplie d'espaces */
-		{
-			free(line);
-			continue;                      /* On retourne au prompt sans rien faire */
-		}
+        line = trim_newline(line); /* supprime \n */
 
-        argv = parse_line(line);           /* Découpe la ligne en mots */
-		if (!argv || !argv[0])             /* Si rien n’a été trouvé */
-		{
-			free(line);
-			free_tokens(argv);
-			continue;
-		}
+        if (is_line_empty(line))
+        {
+            free(line);
+            continue;
+        }
 
-        if (is_builtin(argv[0]))           /* Si c’est une commande interne */
-			handle_builtin(argv, env);     /* ex: exit, env */
-		else
-			execute_command(argv, env);    /* Sinon : fork + execve */
+        argv = parse_line(line); /* découpe mots */
+        if (!argv || !argv[0])
+        {
+            free(line);
+            free_tokens(argv); /* toujours libérer même si NULL */
+            continue;
+        }
 
-		free(line);       /* Libère la ligne allouée par getline */
-		free_tokens(argv);/* Libère chaque mot alloué dans argv */
+        if (is_builtin(argv[0]))
+            handle_builtin(argv, env);
+        else
+            execute_command(argv, env);
 
+        free(line);
+        free_tokens(argv);
     }
 
     free(line);
     return (0);
 }
+
 
 /**
  * prompt_display - Affiche le prompt "*** " si le shell est en mode interactif
