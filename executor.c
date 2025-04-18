@@ -1,7 +1,7 @@
 #include "shell.h"
 
 
-int execute_command(char **argv, char **env);
+int execute_command(char **argv, char **env)
 {
 /*Pour stocker le résultat de fork()*/
 pid_t pid;
