@@ -1,52 +1,51 @@
 #include "shell.h"
 /**
- * find_command_path - Cherche le chemin d'une commande dans $PATH.
- * @cmd : Commande à chercher.
- * @env : Tableau de variables d'environnement.
+ * find_command_path - Cherche le chemin d'une commande dans $PATH
+ * @cmd: Commande à chercher
+ * @env: Tableau de variables d'environnement
  *
- * Retourne le chemin complet de la commande ou NULL si non trouvé.
+ * Return: Chemin complet de la commande ou NULL
  */
 char *find_command_path(char *cmd, char **env)
 {
-    //char *path = NULL;
-    char *full_path = NULL;
-    char *path_env = NULL;
-    char *token = NULL;
+    char *path_env = NULL, *path_copy = NULL;
+    char *token = NULL, *full_path = NULL;
     struct stat st;
-
-    /* Cherche la variable PATH dans l'environnement */
-    for (int i = 0; env[i] != NULL; i++)
+    int i;
+    /* Trouver la variable PATH dans l'environnement */
+    for (i = 0; env[i] != NULL; i++)
     {
         if (strncmp(env[i], "PATH=", 5) == 0)
         {
-            path_env = env[i] + 5; /* Ignore "PATH=" */
+            path_env = env[i] + 5;
             break;
         }
     }
-
     if (path_env == NULL)
-        return (NULL); /* PATH non trouvé */
-
-    /* Découpe le PATH en tokens */
-    token = strtok(path_env, ":");
+        return (NULL);
+    path_copy = strdup(path_env);
+    if (!path_copy)
+        return (NULL);
+    token = strtok(path_copy, ":");
     while (token != NULL)
     {
-        /* Construit le chemin complet */
         full_path = malloc(strlen(token) + strlen(cmd) + 2);
-        if (full_path == NULL)
-            return (NULL); /* Erreur d'allocation mémoire */
-
+        if (!full_path)
+        {
+            free(path_copy);
+            return (NULL);
+        }
         sprintf(full_path, "%s/%s", token, cmd);
-
-        /* Vérifie si le fichier est exécutable */
-        if (stat(full_path, &st) == 0 && S_ISREG(st.st_mode) && is_executable(full_path))
-            return (full_path); /* Chemin trouvé */
-
+        if (stat(full_path, &st) == 0 && is_executable(full_path))
+        {
+            free(path_copy);
+            return (full_path);
+        }
         free(full_path);
         token = strtok(NULL, ":");
     }
-
-    return (NULL); /* Commande non trouvée */
+    free(path_copy);
+    return (NULL);
 }
 
 /*Fonction qui vérifie si le fichier est exécutable*/
