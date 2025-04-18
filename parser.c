@@ -56,10 +56,23 @@ char **parse_line(char *line)
 }
 
 /**
- * free_tokens -
- * @tokens:
+ * free_tokens - Libere un tableau de chaines (tokens)
+ * @tokens: Tableau de chaines à libérer, doit etre terminé par NULL.
+ *
+ * Description:
+ * Cette fonction libère chaque chaine du tableau,
+ * puis libère le tableau lui meme.
+ * on suppose que chaque chaine a été allouée dynamiquement.
  */
 void free_tokens(char **tokens)
 {
-
+	if (tokens == NULL)
+	return;
+	/* Libère chaque chaine du tableau */
+	for (int index = 0; tokens[index] != NULL; index++)
+	{
+		free(tokens[index]);
+	}
+	/* Libère le tableau lui meme*/
+	free(tokens);
 }
