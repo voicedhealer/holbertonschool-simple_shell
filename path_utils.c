@@ -8,7 +8,7 @@
  */
 char *find_command_path(char *cmd, char **env)
 {
-    char *path = NULL;
+    //char *path = NULL;
     char *full_path = NULL;
     char *path_env = NULL;
     char *token = NULL;
