@@ -1,9 +1,4 @@
 #include "shell.h"
-#include <unistd.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
 /**
  * is_builtin - Vérifie si une commande est intégrée (exit ou env)
  * @cmd: Commande à vérifier
