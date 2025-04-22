@@ -40,10 +40,10 @@ This project is a simple version of a UNIX command-line interpreter, also called
 
 
 
-<mark>To compile the shell, use this command :<mark/>
+<mark>To compile the shell, use this command :</mark>
 
 
-gcc -Wall -Werror -Wextra -pedantic *.c -o hsh
+gcc -Wall -Werror -Wextra -pedantic -std=gnu89 -g *.c -o hsh
 
 ---
 <h3 align="left">
