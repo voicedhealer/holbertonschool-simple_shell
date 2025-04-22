@@ -17,7 +17,7 @@ int is_builtin(char *cmd)
 /**
  * animated_exit_message - Affiche un message animé avant la sortie
  */
-void animated_exit_message()
+void animated_exit_message(void)
 {
     char *message = "🤖 Hasta la vista, baby! I'll be back... 🦾";
     int i;  /* Déclaration avant la boucle for */
