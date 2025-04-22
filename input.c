@@ -84,9 +84,11 @@ int is_line_empty(char *line)
 
 	while (*line) /* Parcourt chaque caractère de la chaîne */
 	{
-		if (!isspace((unsigned char)*line))  /* Si un caractère n'est pas un espace, la ligne n'est pas vide */
+		/* Si un caractère n'est pas un espace, la ligne n'est pas vide */
+		if (!isspace((unsigned char)*line))
 			return (0);
 		line++;
 	}
-	return (1);  /* Tous les caractères sont des espaces ou la chaîne est vide */
+	/* Tous les caractères sont des espaces ou la chaîne est vide */
+	return (1);
 }
