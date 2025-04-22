@@ -14,7 +14,7 @@ char **parse_line(char *line)
     if (!argv)
         return (NULL);
 
-    /* Découpe la ligne selon les séparateurs espace, tab, retour chariot, newline */
+    /* Découpe la ligne selon les séparateurs */
     token = strtok(line, " \t\r\n");
     while (token)
     {
