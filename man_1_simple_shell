@@ -78,4 +78,4 @@ main.c shell.c
 .SH SEE ALSO
 sh(1), bash(1)
 .SH BUGS
-Rapportez les bogues à <ivanebagashvili@gmail.com>
+Rapportez les bugs à <ivanebagashvili@gmail.com>
