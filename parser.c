@@ -12,15 +12,23 @@
  * Return: Un tableau de chaînes de caractères (char **)
  * ou NULL en cas d'erreur
  */
+
+ /*Cette fonction reçoit une phrase (line)*/
+ /*et retourne un tableau de mots (char **)*/
 char **parse_line(char *line)
 {
+/*Le tableau de mots (ce sera le résultat final)*/
 	char **argv = NULL;
 
+/*Chaque mot trouvé, un par un*/
 	char *token = NULL;
 
+/*Le nombre de mots déjà trouvés*/
 	size_t argc = 0;
-	size_t size = 8; /* Taille initiale pour le tableau */
+	size_t size = 8; /* Taille initiale pour le tableau (8)*/
 
+/*Si on donne une ligne vide (ou NULL)*/
+/*la fonction ne fait rien et retourne aussi NULL*/
 	if (!line)
 		return (NULL);
 
@@ -31,6 +39,8 @@ char **parse_line(char *line)
 
 	/* Découpe la ligne selon les séparateurs */
 	token = strtok(line, " \t\r\n");
+
+	/*Pas nul tant qu'il y a encore un mot*/
 	while (token)
 	{
 		argv[argc] = strdup(token); /* Duplique la chaîne pour allocation propre */
@@ -39,6 +49,8 @@ char **parse_line(char *line)
 			free_tokens(argv);
 			return (NULL);
 		}
+
+		/*Ajoute un mot en plus dans le tableau*/
 		argc++;
 
 		/* Si tableau plein, on double sa taille */
@@ -60,15 +72,20 @@ char **parse_line(char *line)
 * free_tokens - Libère un tableau de chaînes de caractères
 * @tokens: tableau de chaînes terminé par NULL
 */
+
+/*Reçoit tableau à libérer*/
 void free_tokens(char **tokens)
 {
 	size_t index;
 
+/*Ne fais rien si on ne lui donne rien*/
 	if (!tokens)
 		return;
 
+	/*Libère chaque chaine du tableau*/
 	for (index = 0; tokens[index] != NULL; index++)
 		free(tokens[index]);
 
+	/*Libère le tableau*/
 	free(tokens);
 }
