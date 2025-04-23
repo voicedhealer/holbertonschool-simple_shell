@@ -15,6 +15,7 @@
 /* 🌍 Accès aux variables d'env  */
 /* ----------------------------- */
 extern char **environ;
+extern char *PROGRAM_NAME; 
 /*
  * Cette variable globale contient toutes les variables d’environnement
  * (ex: PATH, HOME, etc.). Elle est utilisée par execve() et pour afficher env
