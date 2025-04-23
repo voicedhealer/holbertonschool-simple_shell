@@ -1,9 +1,13 @@
 #include "shell.h"
+
+extern char *line;
+extern char **argv;
+
 /**
  * is_builtin - Vérifie si une commande est intégrée (exit ou env)
  * @cmd: Commande à vérifier
  *
- * Retourne : 1 si intégrée, 0 sinon
+ * Return: 1 si c’est un builtin (exit/env), sinon 0
  */
 int is_builtin(char *cmd)
 {
@@ -15,7 +19,7 @@ int is_builtin(char *cmd)
 }
 
 /**
- * animated_exit_message - Affiche un message avant la sortie
+ * animated_exit_message - Affiche un message avant de quitter
  */
 void animated_exit_message(void)
 {
@@ -23,15 +27,16 @@ void animated_exit_message(void)
 }
 
 /**
- * handle_builtin - Exécute les commandes intégrées (exit, env)
- * @argv: Tableau d'arguments
- * @env: Variables d'environnement
+ * handle_builtin - Gère les commandes intégrées (exit, env)
+ * @argv: Arguments
+ * @env: Environnement
  *
- * Renvoie : 1 si une commande intégrée a été gérée, 0 sinon
+ * Return: 1 si builtin géré, sinon 0
  */
 int handle_builtin(char **argv, char **env)
 {
 	int i;
+	int status = 0; /* ✅ Déclaration en début de bloc, conforme C89 */
 
 	if (argv == NULL || argv[0] == NULL)
 		return (0);
@@ -39,15 +44,15 @@ int handle_builtin(char **argv, char **env)
 	if (strcmp(argv[0], "exit") == 0)
 	{
 		animated_exit_message();
+
+		/* ✅ Stocke la valeur AVANT de free */
 		if (argv[1] != NULL)
-		{
-			int status = atoi(argv[1]);
-			exit(status);
-		}
-		else
-		{
-			exit(0);
-		}
+			status = atoi(argv[1]);
+
+		free_tokens(argv);
+		free(line);
+
+		exit(status);
 	}
 	else if (strcmp(argv[0], "env") == 0)
 	{
@@ -55,5 +60,6 @@ int handle_builtin(char **argv, char **env)
 			printf("%s\n", env[i]);
 		return (1);
 	}
+
 	return (0);
 }
