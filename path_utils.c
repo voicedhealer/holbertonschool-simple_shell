@@ -1,50 +1,44 @@
 #include "shell.h"
 
 /**
- * get_path_copy - Extrait une copie de la variable PATH de l'environnement
- * @env: Tableau de variables d'environnement
- *
- * Return: Copie allouée dynamiquement de la variable PATH ou NULL
- */
+* get_path_copy - Extrait une copie de la variable PATH de l'environnement
+* @env: Tableau de variables d'environnement
+*
+* Return: Copie allouée dynamiquement de la variable PATH ou NULL
+*/
 
-/*Cherche et copie PATH*/
-char *get_path_copy(char **env)
+char *get_path_copy(char **env) /*Cherche et copie PATH*/
 {
-	/*Contient chemin trouvé*/
-	char *path_env = NULL;
-	/*Compteur de boucle*/
-	int i;
+char *path_env = NULL; /*Contient chemin trouvé*/
 
-	/*Parcours tableau env*/
-	for (i = 0; env[i] != NULL; i++)
-	{
-		/*Si "PATH", copie*/
-		if (strncmp(env[i], "PATH=", 5) == 0)
-		{
-			path_env = strdup(env[i] + 5);
-			break;
-		}
-	}
-	/*Retourne copie*/
-	return (path_env);
+int i; /*Compteur de boucle*/
+
+for (i = 0; env[i] != NULL; i++) /*Parcours tableau env*/
+{
+if (strncmp(env[i], "PATH=", 5) == 0) /*Si "PATH", copie*/
+{
+path_env = strdup(env[i] + 5);
+break;
+}
+}
+return (path_env); /*Retourne copie*/
 }
 
 /**
- * find_command_path - Cherche le chemin absolu d'une commande
- * @cmd: Commande à localiser
- * @env: Environnement
- *
- * Return: Chemin complet (malloc) ou NULL si non trouvé
- */
+* find_command_path - Cherche le chemin absolu d'une commande
+* @cmd: Commande à localiser
+* @env: Environnement
+*
+* Return: Chemin complet (malloc) ou NULL si non trouvé
+*/
 
-/*Cherche chemin cmd dans path*/
-char *find_command_path(char *cmd, char **env)
+char *find_command_path(char *cmd, char **env) /*Cherche chemin cmd dans path*/
 {
-	/*Stock copie path*/
-	char *path_env = NULL, *path_copy = NULL;
-	/*Chaque dossier de path*/
+char *path_env = NULL, *path_copy = NULL; /*Stock copie path*/
+
 	/*Chemin parcouru*/
-	char *token = NULL, *full_path = NULL;
+	char *token = NULL, *full_path = NULL; /*Chaque dossier de path*/
+
 	/*Vérifie fichier*/
 	struct stat st;
 
@@ -92,11 +86,11 @@ char *find_command_path(char *cmd, char **env)
 }
 
 /**
- * is_executable - Vérifie si un fichier est exécutable
- * @full_path: Chemin à tester
- *
- * Return: 1 si le fichier existe et est exécutable, 0 sinon
- */
+* is_executable - Vérifie si un fichier est exécutable
+* @full_path: Chemin à tester
+*
+* Return: 1 si le fichier existe et est exécutable, 0 sinon
+*/
 
 /*Verifie si peut etre exécuté*/
 int is_executable(char *full_path)
@@ -109,3 +103,4 @@ int is_executable(char *full_path)
 	/*Faux*/
 	return (0);
 }
+
