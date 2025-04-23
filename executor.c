@@ -71,3 +71,4 @@ int execute_command(char **argv, char **env)
 
 	free(cmd_path); /* 5. Nettoyage final */
 	return (0); /* Succès */
+}
