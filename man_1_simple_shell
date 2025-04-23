@@ -1,0 +1,81 @@
+.TH man_1_simple_shell  "April 2025" "1.0" "User Commands"
+.SH NAME
+simple_shell \- interpréteur de commandes UNIX simple
+.SH SYNOPSIS
+.B man_1_simple_shell
+.P
+ou
+.P
+.B ./hsh
+.SH DESCRIPTION
+.B simple_shell
+est un interpréteur de commandes qui lit les commandes saisies par l’utilisateur, les exécute et affiche le résultat.
+Il fonctionne en mode interactif (avec un prompt) ou en mode non-interactif (commande passée via un pipe ou un fichier).
+.P
+Les fonctionnalités principales incluent :
+.IP \(bu 2
+Affichage d’un prompt et attente d’une commande utilisateur.
+.IP \(bu 2
+Exécution de commandes système avec ou sans arguments.
+.IP \(bu 2
+Gestion du PATH pour trouver les exécutables.
+.IP \(bu 2
+Commandes internes : 
+.B exit
+(pour quitter le shell), 
+.B env
+(affiche les variables d’environnement).
+.IP \(bu 2
+Gestion des erreurs (commande non trouvée, erreurs d’exécution).
+.IP \(bu 2
+Prise en charge de la fin de fichier (Ctrl+D).
+.SH USAGE
+Lancer le shell :
+.P
+.EX
+$ ./hsh
+.EE
+.P
+Exécuter une commande :
+.P
+.EX
+*** ls -l /tmp
+.EE
+.P
+Quitter le shell :
+.P
+.EX
+*** exit
+.EE
+.P
+Afficher les variables d’environnement :
+.P
+.EX
+*** env
+.EE
+.SH EXAMPLES
+Mode interactif :
+.P
+.EX
+*** ./hsh
+*** /bin/ls
+            
+main.c shell.c
+*** exit
+.EE
+.P
+Mode non-interactif :
+.P
+.EX
+*** echo "/bin/ls" | ./hsh
+main.c shell.c
+.EE
+.SH AUTHORS
+<10549@holbertonstudents.com>
+<ivanebagashvili@gmail.com>
+<choisy_anais@hotmail.fr>
+<vivien.bernardot@gmail.com>
+.SH SEE ALSO
+sh(1), bash(1)
+.SH BUGS
+Rapportez les bogues à <ivanebagashvili@gmail.com>
