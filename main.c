@@ -1,8 +1,4 @@
 #include "shell.h"
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
-
 char *PROGRAM_NAME = NULL;
 char *line = NULL;        /* 👉 rendu global */
 char **argv = NULL;       /* 👉 rendu global */
