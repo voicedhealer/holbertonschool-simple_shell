@@ -17,38 +17,103 @@
 extern char **environ;
 extern char *PROGRAM_NAME;
 extern char *line;
-extern char **argv; 
-/*
- * Cette variable globale contient toutes les variables d’environnement
- * (ex: PATH, HOME, etc.). Elle est utilisée par execve() et pour afficher env
- */
-
-
-/* Prototypes ici */
+extern char **argv;
 
 /* -------- main.c -------- */
-int main(int ac, char **av, char **env);   /* Fonction principale */
-void prompt_display(void);                 /* Affiche le prompt "$ " */
+/**
+ * main - Fonction principale du shell
+ * @ac: nombre d'arguments
+ * @av: tableau d'arguments
+ * @env: environnement
+ * Return: 0 à la fin
+ */
+int main(int ac, char **av, char **env);
+
+/**
+ * prompt_display - Affiche le prompt si shell interactif
+ */
+void prompt_display(void);
+
+/**
+ * main_loop - Boucle principale d'exécution
+ * @env: environnement
+ */
 void main_loop(char **env);
+
 /* -------- input.c -------- */
-char *read_input(void);                    /* Lit une ligne avec getline */
-char *trim_newline(char *line);            /* Supprime le \\n final */
-int is_line_empty(char *line);    /* Vérifie si la ligne est vide ou blanche */
+/**
+ * read_input - Lit une ligne entrée par l'utilisateur
+ * Return: pointeur vers la ligne lue
+ */
+char *read_input(void);
+
+/**
+ * trim_newline - Supprime le retour à la ligne
+ * @line: chaîne d'entrée
+ * Return: chaîne modifiée
+ */
+char *trim_newline(char *line);
+
+/**
+ * is_line_empty - Vérifie si la ligne est vide/blanche
+ * @line: ligne à tester
+ * Return: 1 si vide, sinon 0
+ */
+int is_line_empty(char *line);
 
 /* -------- parser.c -------- */
-char **parse_line(char *line);       /* Découpe la ligne avec strtok en argv */
-void free_tokens(char **tokens);           /* Libère argv[] */
+/**
+ * parse_line - Découpe la ligne en tokens
+ * @line: chaîne à découper
+ * Return: tableau de tokens (argv)
+ */
+char **parse_line(char *line);
+
+/**
+ * free_tokens - Libère un tableau de tokens
+ * @tokens: tableau à libérer
+ */
+void free_tokens(char **tokens);
 
 /* -------- builtins.c -------- */
-int is_builtin(char *cmd);         /* Vérifie si c’est un builtin (exit/env) */
-int handle_builtin(char **argv, char **env); /* Exécute les built-ins */
+/**
+ * is_builtin - Vérifie si une commande est un builtin
+ * @cmd: commande à tester
+ * Return: 1 si builtin, 0 sinon
+ */
+int is_builtin(char *cmd);
+
+/**
+ * handle_builtin - Exécute les commandes builtin
+ * @argv: arguments
+ * @env: environnement
+ * Return: 1 si builtin exécuté, 0 sinon
+ */
+int handle_builtin(char **argv, char **env);
 
 /* -------- executor.c -------- */
-int execute_command(char **argv, char **env); /* fork + execve + wait */
+/**
+ * execute_command - Exécute une commande
+ * @argv: tableau d'arguments
+ * @env: environnement
+ * Return: 0 si succès, 127 si erreur
+ */
+int execute_command(char **argv, char **env);
 
 /* -------- path_utils.c -------- */
+/**
+ * find_command_path - Cherche une commande dans $PATH
+ * @cmd: commande à chercher
+ * @env: environnement
+ * Return: chemin complet si trouvé, sinon NULL
+ */
 char *find_command_path(char *cmd, char **env);
-/* Cherche le chemin d’une commande dans $PATH */
-int is_executable(char *full_path);  /* Vérifie si un fichier est exécutable */
 
-#endif /* SHELL_H */ /* Fin de la protection */
+/**
+ * is_executable - Vérifie si un chemin est exécutable
+ * @full_path: chemin à tester
+ * Return: 1 si exécutable, 0 sinon
+ */
+int is_executable(char *full_path);
+
+#endif /* SHELL_H */
