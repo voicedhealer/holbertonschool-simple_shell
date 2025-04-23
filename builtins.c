@@ -1,8 +1,4 @@
 #include "shell.h"
-
-extern char *line;
-extern char **argv;
-
 /**
  * is_builtin - Vérifie si une commande est intégrée (exit ou env)
  * @cmd: Commande à vérifier

@@ -1,14 +1,27 @@
 #include "shell.h"
-char *PROGRAM_NAME = NULL;
-char *line = NULL;        /* 👉 rendu global */
-char **argv = NULL;       /* 👉 rendu global */
 
+/**
+ * main - Point d’entrée du shell, initialise et lance la boucle principale
+ * @ac: nombre d'arguments (non utilisé)
+ * @av: tableau d'arguments
+ * @env: tableau des variables d’environnement
+ *
+ * Return: 0 à la fin
+ */
 int main(int ac, char **av, char **env)
 {
 	(void)ac;
-	(void)av;
 	PROGRAM_NAME = av[0];
+	main_loop(env);
+	return (0);
+}
 
+/**
+ * main_loop - Boucle principale du shell : prompt + traitement commande
+ * @env: tableau des variables d’environnement
+ */
+void main_loop(char **env)
+{
 	while (1)
 	{
 		prompt_display();
@@ -33,20 +46,13 @@ int main(int ac, char **av, char **env)
 		}
 
 		if (is_builtin(argv[0]))
-		{
 			handle_builtin(argv, env);
-		}
 		else
-		{
 			execute_command(argv, env);
-		}
 
 		free(line);
 		free_tokens(argv);
 	}
-
-	free(line);
-	return (0);
 }
 
 /**

@@ -1,32 +1,48 @@
 #include "shell.h"
-int execute_command(char **argv, char **env)
+
+/**
+ * resolve_command_path - Résout le chemin de la commande, absolu ou via PATH
+ * @argv: Arguments
+ * @env: Environnement
+ *
+ * Return: Le chemin complet ou NULL
+ */
+char *resolve_command_path(char **argv, char **env)
 {
-	pid_t pid;
 	char *cmd_path = NULL;
 
 	if (strchr(argv[0], '/'))
 	{
 		if (access(argv[0], X_OK) == 0)
-		{
 			cmd_path = strdup(argv[0]);
-			if (!cmd_path)
-				return (127);
-		}
 		else
-		{
 			fprintf(stderr, "%s: 1: %s: not found\n", PROGRAM_NAME, argv[0]);
-			return (127);
-		}
 	}
 	else
 	{
 		cmd_path = find_command_path(argv[0], env);
 		if (!cmd_path)
-		{
 			fprintf(stderr, "%s: 1: %s: not found\n", PROGRAM_NAME, argv[0]);
-			return (127);
-		}
 	}
+
+	return (cmd_path);
+}
+
+/**
+ * execute_command - Exécute une commande donnée via fork + execve
+ * @argv: Tableau d’arguments
+ * @env: Environnement
+ *
+ * Return: 0 si succès, 127 si erreur
+ */
+int execute_command(char **argv, char **env)
+{
+	pid_t pid;
+	char *cmd_path = NULL;
+
+	cmd_path = resolve_command_path(argv, env);
+	if (!cmd_path)
+		return (127);
 
 	pid = fork();
 	if (pid == -1)

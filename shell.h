@@ -15,7 +15,9 @@
 /* 🌍 Accès aux variables d'env  */
 /* ----------------------------- */
 extern char **environ;
-extern char *PROGRAM_NAME; 
+extern char *PROGRAM_NAME;
+extern char *line;
+extern char **argv; 
 /*
  * Cette variable globale contient toutes les variables d’environnement
  * (ex: PATH, HOME, etc.). Elle est utilisée par execve() et pour afficher env
@@ -27,7 +29,7 @@ extern char *PROGRAM_NAME;
 /* -------- main.c -------- */
 int main(int ac, char **av, char **env);   /* Fonction principale */
 void prompt_display(void);                 /* Affiche le prompt "$ " */
-
+void main_loop(char **env);
 /* -------- input.c -------- */
 char *read_input(void);                    /* Lit une ligne avec getline */
 char *trim_newline(char *line);            /* Supprime le \\n final */

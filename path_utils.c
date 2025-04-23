@@ -1,87 +1,83 @@
 #include "shell.h"
+
 /**
- * find_command_path - Cherche le chemin d'une commande dans $PATH
- * @cmd: Commande à chercher
+ * get_path_copy - Extrait une copie de la variable PATH de l'environnement
  * @env: Tableau de variables d'environnement
  *
- * Return: Chemin complet de la commande ou NULL
+ * Return: Copie allouée dynamiquement de la variable PATH ou NULL
+ */
+char *get_path_copy(char **env)
+{
+	char *path_env = NULL;
+	int i;
+
+	for (i = 0; env[i] != NULL; i++)
+	{
+		if (strncmp(env[i], "PATH=", 5) == 0)
+		{
+			path_env = strdup(env[i] + 5);
+			break;
+		}
+	}
+	return (path_env);
+}
+
+/**
+ * find_command_path - Cherche le chemin absolu d'une commande
+ * @cmd: Commande à localiser
+ * @env: Environnement
+ *
+ * Return: Chemin complet (malloc) ou NULL si non trouvé
  */
 char *find_command_path(char *cmd, char **env)
 {
-    char *path_env = NULL, *path_copy = NULL;
-    char *token = NULL, *full_path = NULL;
-    struct stat st;
-    int i;
+	char *path_env = NULL, *path_copy = NULL;
+	char *token = NULL, *full_path = NULL;
+	struct stat st;
 
-    /* Trouver la variable PATH dans l'environnement */
-    for (i = 0; env[i] != NULL; i++)
-    {
-        if (strncmp(env[i], "PATH=", 5) == 0)
-        {
-            path_env = strdup(env[i] + 5);
-            break;
-        }
-    }
+	path_env = get_path_copy(env);
+	if (!path_env)
+		return (NULL);
 
-    if (path_env == NULL)
-        return (NULL);
+	path_copy = strdup(path_env);
+	free(path_env);
+	if (!path_copy)
+		return (NULL);
 
-    path_copy = strdup(path_env);
-    if (!path_copy)
-    {
-        free(path_env);
-        return (NULL);
-    }
+	token = strtok(path_copy, ":");
+	while (token != NULL)
+	{
+		full_path = malloc(strlen(token) + strlen(cmd) + 2);
+		if (!full_path)
+		{
+			free(path_copy);
+			return (NULL);
+		}
 
-    token = strtok(path_copy, ":");
-    while (token != NULL)
-    {
-        full_path = malloc(strlen(token) + strlen(cmd) + 2);
-        if (!full_path)
-        {
-            free(path_copy);
-            free(path_env);
-            return (NULL);
-        }
+		sprintf(full_path, "%s/%s", token, cmd);
+		if (stat(full_path, &st) == 0 && is_executable(full_path))
+		{
+			free(path_copy);
+			return (full_path);
+		}
 
-        sprintf(full_path, "%s/%s", token, cmd);
-        if (stat(full_path, &st) == 0 && is_executable(full_path))
-        {
-            free(path_copy);
-            free(path_env);
-            return (full_path);
-        }
-        free(full_path);
-        token = strtok(NULL, ":");
-    }
+		free(full_path);
+		token = strtok(NULL, ":");
+	}
 
-    free(path_copy);
-    free(path_env);
-    return (NULL);
+	free(path_copy);
+	return (NULL);
 }
 
-
-/* Fonction qui vérifie si le fichier est exécutable */
+/**
+ * is_executable - Vérifie si un fichier est exécutable
+ * @full_path: Chemin à tester
+ *
+ * Return: 1 si le fichier existe et est exécutable, 0 sinon
+ */
 int is_executable(char *full_path)
 {
-/**
- * On utilise la fonction access() pour vérifier si le fichier existe
- * et si on peut l'exécuter.
- * access(full_path, F_OK) -> vérifie si le fichier existe,
- * F_OK vérifie la présence du fichier.
- * access(full_path, X_OK) -> vérifie si le fichier est exécutable,
- * X_OK vérifie les permissions d'exécution.
- */
-
-	/* Si les deux conditions sont vraies (fichier existe ET est exécutable) */
 	if (access(full_path, F_OK) == 0 && access(full_path, X_OK) == 0)
-	{
-	/* Si c'est le cas, retourne 1 (indiquant que le fichier est exécutable) */
 		return (1);
-	}
-	else
-	{
-	/* Sinon, on retourne 0 */
-		return (0);
-	}
+	return (0);
 }

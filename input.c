@@ -1,6 +1,4 @@
 #include "shell.h"
-#include <stdio.h>
-#include <stdlib.h>
 /**
 * read_input - Affiche un prompt et lit une ligne de l'utilisateur.
 *
