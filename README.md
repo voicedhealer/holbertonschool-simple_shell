@@ -75,7 +75,7 @@ gcc -Wall -Werror -Wextra -pedantic -std=gnu89 *.c -o hsh
 
 <mark>To display the manpage :<mark/>
 
-man ./hsh.1
+ man ./man_1_simple_shell
 
 ---
 
@@ -96,7 +96,36 @@ cat test_commands.txt | ./hsh
 valgrind --leak-check=full  ./hsh
 
 ---
+🗂️ Liste des fichiers
+
+Les fichiers suivants composent l’architecture de notre shell :
+
+    main.c : Point d'entrée du programme
+
+    input.c : Lecture de la ligne de commande depuis l’entrée standard
+
+    parser.c : Découpage (tokenization) de la ligne en commandes + arguments
+
+    executor.c : Exécution des commandes (fork, execve, gestion du PATH)
+
+    builtins.c : Gestion des commandes internes (exit, env, etc.)
+
+    path_utils.c : Recherche de la commande dans les chemins du PATH
+
+    globals.c : Déclaration des variables globales (line, argv, etc.)
+
+    shell.h : Fichier d’en-tête avec les prototypes et macros nécessaires
+
+    README.md : Documentation du projet
+
+    AUTHORS : Liste des auteurs du projet
+
+    man_1_simple_shell : Page de manuel (commande man)
+
 
 ![FlowChartShell drawio](https://github.com/user-attachments/assets/20b5b1dd-3632-4d3b-97ae-d69b28351a32)
 
 
+✍️ Auteurs
+
+Voir fichier AUTHORS
