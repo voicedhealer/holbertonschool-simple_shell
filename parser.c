@@ -1,39 +1,42 @@
 #include "shell.h"
 
 /**
- * parse_line - Splits a command line into tokens
- * @line: The input string to parse (command line)
+ * parse_line - Découpe une ligne de commande en tokens
+ * @line: Chaine d'entrée vers parse (ligne de commande)
  *
- * Tokenizes the input string using spaces
- * tabs, carriage returns, and newlines
- * as delimiters. Returns a dynamically allocated array of strings (char **),
- * where each element is a token from the input. The array is NULL-terminated.
+* Tokenise la chaîne d'entrée en utilisant des espaces,
+ * des tabulations, des retours chariot et des sauts de ligne comme
+ * délimiteurs. Renvoie un tableau de chaînes alloué dynamiquement (char **)
+ * où chaque élément est un token de l'entrée.
+ * Le tableau se termine par NULL.
  *
- * Return: On success - dynamically allocated array of tokens.
- *         On failure - NULL (invalid input or memory allocation error).
- *         Caller must free the result with free_tokens().
+ * Return:
+ * En cas de succès : tableau de tokens alloué dynamiquement.
+ * En cas d'échec : NULL (entrée invalide ou erreur d'allocation mémoire).
+ * L'appelant doit libérer le résultat avec free_tokens().
  */
 char **parse_line(char *line)
 {
-	char **argv = NULL;   /* Array to store tokens */
-	char *token = NULL;   /* Individual token */
-	size_t argc = 0;      /* Token counter */
-	size_t size = 8;      /* Initial array capacity */
+	/* Déclaration des variables */
+	char **argv = NULL;   /* Tableau de pointeurs vers les tokens */
+	char *token = NULL;   /* Token courant */
+	size_t argc = 0;      /* Compteur de tokens */
+	size_t size = 8;      /* Capacité initiale du tableau */
 
-	if (!line)
+	if (!line) /* Vérification de la validité de l'entrée */
 		return (NULL);
 
-	/* Allocate initial token array */
+	/* Allocation mémoire initiale pour le tableau de tokens */
 	argv = malloc(size * sizeof(char *));
 	if (!argv)
 		return (NULL);
 
-	/* Extract first token */
+	/* Extraction du premier token */
 	token = strtok(line, " \t\r\n");
 
-	while (token)
+	while (token) /* Parcours de tous les tokens */
 	{
-		/* Store duplicated token */
+		/* Duplication et stockage du token */
 		argv[argc] = strdup(token);
 		if (!argv[argc])
 		{
@@ -42,7 +45,7 @@ char **parse_line(char *line)
 		}
 		argc++;
 
-		/* Double array size if full */
+		/* Gestion du redimensionnement du tableau */
 		if (argc >= size)
 		{
 			size *= 2;
@@ -50,29 +53,30 @@ char **parse_line(char *line)
 			if (!argv)
 				return (NULL);
 		}
-		token = strtok(NULL, " \t\r\n");
+		token = strtok(NULL, " \t\r\n"); /* Extraction du token suivant */
 	}
 
-argv[argc] = NULL;
-return (argv);
+	argv[argc] = NULL; /* Marquage de la fin du tableau */
+	return (argv); /* Retour du tableau de tokens */
 }
 
 /**
- * free_tokens - Frees a NULL-terminated array of strings
- * @tokens: Array of strings to free
+ * free_tokens - Libère un tableau de chaînes, terminé par NULL
+ * @tokens: Tableau de chaînes à libérer
  *
- * Iterates through the array, freeing each string and finally
- * freeing the array itself. Handles NULL input gracefully.
+ * Parcourt le tableau, libérant chaque chaîne et libérant finalement
+ * le tableau lui-même. Gère les entrées NULL avec élégance.
  */
 void free_tokens(char **tokens)
 {
-	size_t index;
+	size_t index; /* Compteur de boucle */
 
-if (!tokens)
+if (!tokens) /* Vérification de la validité du pointeur */
 return;
 
+/* Parcours et libération de chaque token */
 for (index = 0; tokens[index] != NULL; index++)
-free(tokens[index]);
+free(tokens[index]); /* Libération mémoire d'un élément */
 
-free(tokens);
+free(tokens); /* Libération du tableau principal */
 }
